@@ -41,7 +41,7 @@ public class AuthTokenFilter extends OncePerRequestFilter{
 				// After get username from jwt token, using username with UserDetailsService
 				UserDetails userDetails = userDetialsService.loadUserByUsername(userName);
 				
-				// Create UsernamePasswordAutheticationToken validating by AuthenticatioManager or AuthenticationManager
+				// Create UsernamePasswordAutheticationToken which validate by AuthenticatioManager or AuthenticationProvider
 				UsernamePasswordAuthenticationToken authenticationToken = 
 						new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 				
