@@ -68,19 +68,17 @@ public class AuthController {
 		// Get Principal(Current Logged In User) from authenticated object
 		UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 		
-		// Generate JWT Cookie using UserDetails
-		ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(userDetails);
+		// Generate JWT token using UserDetails
+		String jwt = jwtUtils.generateJwtToken(userDetails);
 		
 		// Get Granted Authorities from UserDetails
 		List<String> roles = userDetails.getAuthorities().stream()
 				.map(item -> item.getAuthority())
 				.collect(Collectors.toList());
 		
-		return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
-				.body(new UserInfoResponse(userDetails.getId(), 
-						userDetails.getUsername(), 
-						userDetails.getEmail(), 
-						roles));
+		return ResponseEntity.ok(new UserInfoResponse(userDetails.getId(), 
+				userDetails.getUsername(), 
+				userDetails.getEmail(), roles, jwt));
 	}
 	
 	@PostMapping("/signout")

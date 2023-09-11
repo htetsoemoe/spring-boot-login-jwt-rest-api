@@ -8,13 +8,31 @@ public class UserInfoResponse {
 	private String username;
 	private String email;
 	private List<String> roles;
+	private String token;
+	private String type = "Bearer";
 
-	public UserInfoResponse(Long id, String username, String email, List<String> roles) {
-		super();
+	public UserInfoResponse(Long id, String username, String email, List<String> roles, String accessToken) {
 		this.id = id;
 		this.username = username;
 		this.email = email;
 		this.roles = roles;
+		this.token = accessToken;
+	}
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 
 	public Long getId() {

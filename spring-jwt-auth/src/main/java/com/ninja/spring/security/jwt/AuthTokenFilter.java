@@ -9,6 +9,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.ninja.spring.security.service.UserDetailsServiceImpl;
@@ -38,7 +39,7 @@ public class AuthTokenFilter extends OncePerRequestFilter{
 			if (null != jwt && jwtUtils.validateJwtToken(jwt)) {
 				String userName = jwtUtils.getUserNameFromJwtToken(jwt);
 				
-				// After get username from jwt token, using username with UserDetailsService
+				// After get user-name from JWT token, using user-name with UserDetailsService
 				UserDetails userDetails = userDetialsService.loadUserByUsername(userName);
 				
 				// Create UsernamePasswordAutheticationToken which validate by AuthenticatioManager or AuthenticationProvider
@@ -61,8 +62,12 @@ public class AuthTokenFilter extends OncePerRequestFilter{
 	
 	// Helper method for parse JWT from HttpServletRequest
 	private String parseJwt(HttpServletRequest request) {
-		String jwt = jwtUtils.getJwtFromCookies(request);
-		return jwt;
+		String headerAuth = request.getHeader("Authorization");
+		
+		if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
+			return headerAuth.substring(7);
+		}
+		return null;
 	}
 
 }
